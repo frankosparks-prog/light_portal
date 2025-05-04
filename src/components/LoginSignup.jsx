@@ -1,130 +1,74 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const LoginSignup = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-    form_level: "",
-  });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
   const navigate = useNavigate();
-  const FormLevels = ["Form One", "Form Two", "Form Three", "Form Four"];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setForm({ username: "", email: "", password: "", form_level: "" });
-    setError("");
-    setSuccess("");
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+
     try {
-      const endpoint = isLogin ? "/api/login" : "/api/signup";
-      const { data } = await axios.post(
-        `http://localhost:5000${endpoint}`,
-        form,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      localStorage.setItem("token", data.token);
-      setSuccess(data.message);
-      setError("");
-      navigate("/sidebar"); // Redirect to profile (protected route)
-    } catch (err) {
-      console.error(err);
-      setSuccess("");
-      setError(
-        err.response?.data?.message ||
-          err.response?.data?.error ||
-          "Something went wrong"
-      );
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        setErrorMsg(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMsg("Something went wrong. Try again.");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>{isLogin ? "Login" : "Sign Up"} to Light Academy</h2>
-      <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <>
-            <input
-              type="text"
-              name="username"
-              placeholder="Name"
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
-            <select
-              name="form_level"
-              value={form.form_level}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Form Level</option>
-              {FormLevels.map((level, idx) => (
-                <option key={idx} value={level}>
-                  {level}
-                </option>
-              ))}
-            </select>
-          </>
-        )}
+    <div className="login-container">
+      <h2>Login to Student Portal</h2>
+      <form onSubmit={handleLogin}>
         <input
           type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          {isLogin ? "Login" : "Sign Up"}
-        </button>
-        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
-        {success && (
-          <p style={{ color: "green", marginTop: "1rem" }}>{success}</p>
-        )}
-      </form>
 
-      <p style={{ marginTop: "1rem" }}>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <button
-          onClick={toggleMode}
-          style={{
-            textDecoration: "underline",
-            border: "none",
-            background: "none",
-            cursor: "pointer",
-            color: "blue",
-          }}
-        >
-          {isLogin ? "Sign Up" : "Login"}
-        </button>
-      </p>
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <FontAwesomeIcon
+            icon={showPassword ? faEyeSlash : faEye}
+            className="toggle-password"
+            onClick={() => setShowPassword(!showPassword)}
+            title={showPassword ? "Hide password" : "Show password"}
+          />
+        </div>
+
+        {errorMsg && <p className="error">{errorMsg}</p>}
+
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
 };

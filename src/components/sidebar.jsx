@@ -43,9 +43,10 @@ const Sidebar = () => {
         <div ref={sidebarRef} className="sidebar">
           <h2 className="sidebar-title">Light Academy</h2>
           <nav className="sidebar-nav">
+            <NavLink to="/Dashboard">Dashboard</NavLink>
             <NavLink to="/profile">Profile</NavLink>
             <NavLink to="/fees">Fee Payment</NavLink>
-            <NavLink to="/discipline">Discipline Records</NavLink>
+            <NavLink to="/FeeStrucure">FeeStructure</NavLink>
             <NavLink to="/academics">Academic Records</NavLink>
             <NavLink to="/library">Library</NavLink>
             <button onClick={handleLogout} className="logout-btn">
