@@ -9,12 +9,6 @@ function AcademicInfo() {
         <strong>Current Year:</strong>{" "}
         <span className="highlight">Form Two E</span>
       </div>
-      <div>
-        <strong>Attempted Units:</strong> <span className="highlight">37</span>
-      </div>
-      <div>
-        <strong>Registered Units:</strong> <span className="highlight">8</span>
-      </div>
     </div>
   );
 }

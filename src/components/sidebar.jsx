@@ -30,7 +30,7 @@ const Sidebar = () => {
     localStorage.removeItem("loginObj");
     localStorage.removeItem("adminToken");
     localStorage.removeItem("token"); // Important: also remove token
-    navigate("/");
+    navigate("/LoginSignup");
   };
 
   return (

@@ -6,8 +6,7 @@ function FeePayment() {
     <div className="card fee-payment">
       <h3>Fee Payment</h3>
       <div>
-        <strong>Fee Balance:</strong>{" "}
-        <span className="highlight">-29,460.00</span>
+        <strong>Fee Balance:</strong> <span className="highlight"></span>
       </div>
       <button className="pay-btn">Make Payment</button>
       <a href="#" className="paid-link">
