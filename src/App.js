@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/sidebar";
 import LoginSignup from "./components/LoginSignup";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
@@ -35,9 +35,12 @@ const App = () => {
     <Routes>
       <Route
         path="/"
-        element={isLoggedIn ? <Navigate to="/dashboard" /> : <LoginSignup />}
+        element={<Dashboard />}
+        // element={
+        //   isLoggedIn ? <Navigate to="/dashboard" /> : <LoginSignup />
+        // }
       />
-      <Route element={<ProtectedLayout />}>
+      <Route >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Financials" element={<Financials />} />

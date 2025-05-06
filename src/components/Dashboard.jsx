@@ -1,4 +1,4 @@
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 import Topbar from "./Topbar";
 import BasicInfo from "./BasicInfo";
 import AcademicInfo from "./AcademicInfo";
